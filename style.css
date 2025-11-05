@@ -1,214 +1,60 @@
-/* Styling Global */
-* {
-    box-sizing: border-box;
-    margin: 0;
-    padding: 0;
-}
-
-body {
-    background-color: #f0f0f0;
-    font-family: Arial, sans-serif;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    min-height: 100vh;
-}
-
-/* --- Mode Selection Styling --- */
-.mode-selection {
-    background-color: white;
-    padding: 30px;
-    border-radius: 10px;
-    box-shadow: 0 0 20px rgba(0, 0, 0, 0.1);
-    text-align: center;
-}
-
-.mode-selection h1 {
-    margin-bottom: 25px;
+/* Styling untuk Kotak Penjelasan (Mode Penjelasan) */
+.explanation-box {
+    margin-top: 25px;
+    padding: 15px;
+    border: 1px solid #ddd;
+    border-left: 5px solid #007bff; /* Garis biru di kiri */
+    background-color: #e9f7ff;
+    border-radius: 5px;
+    font-size: 0.95em;
     color: #333;
 }
 
-.mode-selection button {
-    background-color: #4CAF50;
-    color: white;
-    border: none;
-    padding: 15px 30px;
-    margin: 10px;
-    border-radius: 8px;
-    cursor: pointer;
-    font-size: 1.1em;
-    transition: background-color 0.3s;
+.explanation-box strong {
+    color: #0056b3;
 }
 
-.mode-selection button:hover {
-    background-color: #45a049;
-}
-
-
-/* --- Main Container & Layout (Mode Penjelasan) --- */
-.main-container {
-    display: flex;
-    width: 90%; /* Lebar total kontainer utama */
-    max-width: 1200px;
-    gap: 20px;
-}
-
-/* Sidebar Navigasi Soal */
-.sidebar {
-    width: 250px;
-    background-color: #ffffff;
-    padding: 15px;
-    border-radius: 8px;
-    box-shadow: 0 0 10px rgba(0, 0, 0, 0.05);
-}
-
-.sidebar h3 {
-    margin-bottom: 15px;
-    border-bottom: 2px solid #eee;
-    padding-bottom: 5px;
-    color: #555;
-}
-
-#question-list {
-    display: flex;
-    flex-wrap: wrap;
-    gap: 8px;
-}
-
-.q-nav-btn {
-    width: 45px;
-    height: 45px;
-    background-color: #e0e0e0;
+/* Styling untuk Halaman Hasil Akhir (Mode Peserta) */
+.result-details {
+    margin-top: 20px;
+    max-height: 400px; /* Batasi tinggi agar bisa di-scroll */
+    overflow-y: auto; 
+    padding: 0 10px;
     border: 1px solid #ccc;
     border-radius: 5px;
-    cursor: pointer;
-    transition: all 0.2s;
-    font-weight: bold;
+}
+
+.result-item {
+    padding: 15px;
+    margin-bottom: 10px;
+    border-radius: 5px;
+    border-left: 5px solid;
+}
+
+.result-item h4 {
+    margin-bottom: 5px;
+    font-size: 1.1em;
+}
+
+.result-item p {
+    margin-bottom: 3px;
     font-size: 0.9em;
 }
 
-/* Style untuk soal yang sedang aktif */
-.q-nav-btn.active {
-    background-color: #007bff;
-    color: white;
-    border-color: #0056b3;
-    transform: scale(1.05);
+.result-item.correct {
+    background-color: #d4edda;
+    border-color: #28a745;
 }
 
-/* Style untuk soal yang sudah diisi */
-.q-nav-btn.answered {
-    background-color: #28a745;
-    color: white;
+.result-item.incorrect {
+    background-color: #f8d7da;
+    border-color: #dc3545;
 }
 
-.q-nav-btn:hover:not(.active) {
-    background-color: #d0d0d0;
-}
-
-/* --- Quiz Container Styling --- */
-.quiz-container {
-    flex-grow: 1; /* Mengisi sisa ruang */
-    background-color: white;
-    padding: 40px;
-    border-radius: 10px;
-    box-shadow: 0 0 20px rgba(0, 0, 0, 0.1);
-    max-width: 700px; /* Batasi lebar kontainer ujian */
-}
-
-.quiz-header {
-    margin-bottom: 20px;
-}
-
-#question, #question-number {
-    color: #333;
-    margin: 10px 0;
-}
-
-/* Timer Styling (Mode Peserta) */
-.timer {
-    font-size: 1.5em;
-    font-weight: bold;
-    color: #dc3545; /* Merah untuk menarik perhatian waktu */
-    text-align: right;
-    margin-bottom: 10px;
-    padding: 5px 0;
-}
-
-/* Pilihan Jawaban */
-.answer-list {
-    list-style-type: none;
-    padding: 0;
-}
-
-.answer-list li {
-    margin: 15px 0;
-    font-size: 1.1em;
-    cursor: pointer;
-    padding: 10px;
-    border-radius: 5px;
-    transition: background-color 0.2s;
-}
-
-.answer-list li:hover {
-    background-color: #f9f9f9;
-}
-
-.answer-list input[type="radio"] {
-    margin-right: 15px;
-    transform: scale(1.2);
-}
-
-.answer-list label {
-    font-weight: normal;
-    cursor: pointer;
-}
-
-/* Tombol Submit & Navigasi */
-.navigation-buttons {
-    display: flex;
-    justify-content: space-between;
-    margin-top: 30px;
-}
-
-#submit, #prev, #next {
-    background-color: #007bff;
-    color: white;
-    border: none;
-    padding: 15px 25px;
-    border-radius: 8px;
-    cursor: pointer;
-    font-size: 1.1em;
-    transition: background-color 0.3s;
-    flex-grow: 1; 
-    margin: 0 5px;
-}
-
-#submit:hover, #prev:hover, #next:hover {
-    background-color: #0056b3;
-}
-
-/* Penyesuaian lebar tombol utama */
-#submit {
-    flex-grow: 2; /* Tombol submit lebih lebar */
-}
-
-/* Responsive design sederhana */
-@media (max-width: 800px) {
-    .main-container {
-        flex-direction: column;
-        width: 95%;
-    }
-    .sidebar {
-        width: 100%;
-    }
-    .quiz-container {
-        width: 100%;
-        padding: 20px;
-    }
-    .navigation-buttons {
-        flex-direction: column;
-    }
-    #submit, #prev, #next {
-        margin: 5px 0;
-    }
+.result-explanation {
+    margin-top: 8px;
+    font-style: italic;
+    color: #555;
+    border-top: 1px dashed #ccc;
+    padding-top: 5px;
 }
