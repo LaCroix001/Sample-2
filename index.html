@@ -1,0 +1,67 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Ujian Sederhana</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+    <div class="mode-selection" id="mode-selection">
+        <h1>Pilih Mode Ujian</h1>
+        <button id="mode-peserta">Mode Peserta (Waktu Terbatas)</button>
+        <button id="mode-penjelasan">Mode Penjelasan (Bebas Navigasi)</button>
+    </div>
+
+    <div class="main-container" id="main-container" style="display: none;">
+
+        <div class="sidebar" id="sidebar">
+            <h3>Daftar Soal</h3>
+            <div id="question-list">
+                </div>
+        </div>
+
+        <div class="quiz-container" id="quiz">
+
+            <div class="quiz-header">
+                <div id="timer" class="timer">Waktu: 30</div>
+                <h2 id="question-number">Soal 1/40</h2>
+                <h2 id="question">Pertanyaan Ujian Akan Tampil Di Sini</h2>
+            </div>
+
+            <ul class="answer-list">
+                <li>
+                    <input type="radio" name="answer" id="a" class="answer">
+                    <label for="a" id="a_text">Jawaban A</label>
+                </li>
+                <li>
+                    <input type="radio" name="answer" id="b" class="answer">
+                    <label for="b" id="b_text">Jawaban B</label>
+                </li>
+                <li>
+                    <input type="radio" name="answer" id="c" class="answer">
+                    <label for="c" id="c_text">Jawaban C</label>
+                </li>
+                <li>
+                    <input type="radio" name="answer" id="d" class="answer">
+                    <label for="d" id="d_text">Jawaban D</label>
+                </li>
+                <li>
+                    <input type="radio" name="answer" id="e" class="answer">
+                    <label for="e" id="e_text">Jawaban E</label>
+                </li>
+            </ul>
+
+            <div class="navigation-buttons">
+                <button id="prev" style="display: none;">Sebelumnya</button>
+                <button id="submit">Submit Jawaban</button>
+                <button id="next" style="display: none;">Selanjutnya</button>
+            </div>
+        </div>
+    </div>
+
+    <script src="data.js"></script>
+    <script src="script.js"></script>
+</body>
+</html>
