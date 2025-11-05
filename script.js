@@ -1,141 +1,55 @@
-// ====================================================================
-// 1. ELEMEN DOM (Document Object Model)
-// ====================================================================
+// ... (Bagian 1 dan 2 Variabel Global) ...
 
-const modeSelection = document.getElementById('mode-selection');
-const mainContainer = document.getElementById('main-container');
-const quiz = document.getElementById('quiz');
+// Tambahkan elemen baru untuk menampilkan penjelasan
+const explanationEl = document.createElement('div');
+explanationEl.id = 'explanation';
+explanationEl.classList.add('explanation-box');
+quiz.insertBefore(explanationEl, document.getElementById('submit').parentElement); // Masukkan sebelum tombol
 
-const questionEl = document.getElementById('question');
-const questionNumberEl = document.getElementById('question-number');
-const timerEl = document.getElementById('timer');
-const answerEls = document.querySelectorAll('.answer');
-const submitBtn = document.getElementById('submit');
-const nextBtn = document.getElementById('next');
-const prevBtn = document.getElementById('prev');
-const questionListEl = document.getElementById('question-list');
-const sidebarEl = document.getElementById('sidebar');
-
-const a_text = document.getElementById('a_text');
-const b_text = document.getElementById('b_text');
-const c_text = document.getElementById('c_text');
-const d_text = document.getElementById('d_text');
-const e_text = document.getElementById('e_text'); // Untuk opsi E
-
-// ====================================================================
-// 2. VARIABEL GLOBAL
-// ====================================================================
-
-let currentQuiz = 0; // Indeks soal yang sedang ditampilkan
-let score = 0;
-let userAnswers = new Array(quizData.length).fill(null); // Menyimpan jawaban pengguna
-let currentMode = null; // 'peserta' atau 'penjelasan'
-let timerInterval; // Untuk mengontrol timer
-const TIME_LIMIT = 30; // Batas waktu per soal dalam Mode Peserta
-
-// ====================================================================
-// 3. FUNGSI UTAMA
-// ====================================================================
+// ... (lanjutan kode) ...
 
 /**
  * Memuat soal berdasarkan indeks (currentQuiz)
  */
 function loadQuiz() {
-    deselectAnswers();
-
-    const currentQuizData = quizData[currentQuiz];
-    const totalQuestions = quizData.length;
-
-    // 1. Update teks soal dan nomor
-    questionNumberEl.innerText = `Soal ${currentQuiz + 1}/${totalQuestions}`;
-    questionEl.innerText = currentQuizData.question;
-
-    // 2. Update pilihan jawaban
-    a_text.innerText = currentQuizData.a;
-    b_text.innerText = currentQuizData.b;
-    c_text.innerText = currentQuizData.c;
-    d_text.innerText = currentQuizData.d;
-    e_text.innerText = currentQuizData.e || 'N/A'; // Opsi E mungkin tidak selalu ada
-
-    // 3. Muat kembali jawaban pengguna jika sudah pernah diisi
-    const savedAnswer = userAnswers[currentQuiz];
-    if (savedAnswer) {
-        document.getElementById(savedAnswer).checked = true;
-    }
-
-    // 4. Update tampilan tombol next/prev (hanya di Mode Penjelasan)
-    if (currentMode === 'penjelasan') {
-        prevBtn.style.display = currentQuiz > 0 ? 'inline-block' : 'none';
-        nextBtn.style.display = currentQuiz < totalQuestions - 1 ? 'inline-block' : 'none';
-        submitBtn.style.display = 'inline-block'; // Tombol Submit tetap ada
-    } else {
-        // Di Mode Peserta, navigasi hanya melalui timer/submit
-        prevBtn.style.display = 'none';
-        nextBtn.style.display = 'none';
-    }
-
-    updateQuestionListStatus();
-
-    // Reset timer jika Mode Peserta
-    if (currentMode === 'peserta') {
-        resetTimer();
-    }
-}
-
-/**
- * Menghilangkan pilihan radio yang sudah tercentang
- */
-function deselectAnswers() {
-    answerEls.forEach(answerEl => answerEl.checked = false);
-}
-
-/**
- * Mendapatkan ID jawaban yang dipilih pengguna ('a', 'b', 'c', d', 'e', atau undefined)
- */
-function getSelected() {
-    let answer = undefined;
-    answerEls.forEach(answerEl => {
-        if (answerEl.checked) {
-            answer = answerEl.id;
-        }
-    });
-    return answer;
-}
-
-/**
- * Mengatur dan menjalankan Timer (Mode Peserta)
- */
-function resetTimer() {
-    clearInterval(timerInterval);
-    let timeLeft = TIME_LIMIT;
-    timerEl.innerText = `Waktu: ${timeLeft}`;
+    // ... (kode loadQuiz sebelumnya) ...
     
-    timerInterval = setInterval(() => {
-        timeLeft--;
-        timerEl.innerText = `Waktu: ${timeLeft}`;
+    // ... (kode loadQuiz sebelumnya) ...
 
-        if (timeLeft <= 0) {
-            clearInterval(timerInterval);
-            // Lanjutkan otomatis ke soal berikutnya
-            processAnswer(true); 
-        }
-    }, 1000);
+    // 5. Penyesuaian tampilan berdasarkan Mode
+    
+    // Hapus semua highlight jawaban
+    document.querySelectorAll('.answer-list li').forEach(li => {
+        li.classList.remove('correct-answer', 'incorrect-answer');
+    });
+
+    // Sembunyikan penjelasan secara default
+    explanationEl.style.display = 'none';
+
+    if (currentMode === 'penjelasan') {
+        // Mode Penjelasan: Langsung tampilkan kunci & penjelasan
+        displayCorrectAnswer();
+        explanationEl.innerHTML = `<strong>Pembahasan:</strong> ${currentQuizData.explanation}`;
+        explanationEl.style.display = 'block';
+        submitBtn.style.display = 'none'; // Sembunyikan tombol submit di mode penjelasan
+    } else {
+        // Mode Peserta
+        submitBtn.style.display = 'inline-block'; // Pastikan tombol submit terlihat
+        // ... (kode lain untuk mode peserta)
+    }
 }
+// ... (kode loadQuiz lainnya) ...
 
 /**
  * Memproses jawaban pengguna dan melanjutkan ke soal berikutnya
- * @param {boolean} autoAdvance - True jika lanjut otomatis karena waktu habis
+ * Kita HAPUS jeda 1 detik untuk melihat jawaban di sini, karena feedback total diberikan di akhir
  */
 function processAnswer(autoAdvance = false) {
     const answer = getSelected();
     
-    // Simpan jawaban, meskipun jawaban itu null (untuk soal yang tidak dijawab)
-    userAnswers[currentQuiz] = answer; 
+    userAnswers[currentQuiz] = answer || null; // Simpan jawaban (atau null jika waktu habis/tidak dijawab)
 
-    // Stop timer
-    clearInterval(timerInterval);
-
-    // Lanjut ke soal berikutnya jika bukan soal terakhir
+    // Langsung lanjut ke soal berikutnya (tanpa jeda 1 detik)
     currentQuiz++;
 
     if (currentQuiz < quizData.length) {
@@ -146,137 +60,45 @@ function processAnswer(autoAdvance = false) {
     }
 }
 
+
 /**
- * Menampilkan hasil ujian
+ * Menampilkan hasil ujian (Diperbarui untuk Mode Peserta)
  */
 function showResults() {
     // Hitung skor akhir
-    score = 0;
-    userAnswers.forEach((answer, index) => {
-        if (answer === quizData[index].correct) {
-            score++;
-        }
+    score = userAnswers.reduce((acc, answer, index) => {
+        return acc + (answer === quizData[index].correct ? 1 : 0);
+    }, 0);
+
+    let resultHTML = `
+        <h2>Hasil Ujian Anda - Mode Peserta</h2>
+        <p>Anda menjawab **${score}/${quizData.length}** soal dengan benar.</p>
+        <hr>
+        <h3>Rincian Jawaban:</h3>
+        <div class="result-details">
+    `;
+
+    // Buat rincian untuk setiap soal
+    quizData.forEach((data, index) => {
+        const userAnswer = userAnswers[index];
+        const isCorrect = userAnswer === data.correct;
+        
+        resultHTML += `
+            <div class="result-item ${isCorrect ? 'correct' : 'incorrect'}">
+                <h4>Soal ${index + 1}: ${data.question.substring(0, 50)}...</h4>
+                <p>Jawaban Anda: **${userAnswer ? userAnswer.toUpperCase() : 'Tidak Dijawab'}**</p>
+                <p>Kunci Jawaban: **${data.correct.toUpperCase()}**</p>
+                <p class="result-explanation">Pembahasan: ${data.explanation}</p>
+            </div>
+        `;
     });
+
+    resultHTML += `</div><button onclick="location.reload()">Ulangi Ujian</button>`;
 
     // Tampilkan hasil
-    quiz.innerHTML = `
-        <h2>Anda menyelesaikan ujian!</h2>
-        <p>Anda menjawab ${score}/${quizData.length} soal dengan benar.</p>
-        <button onclick="location.reload()">Ulangi Ujian</button>
-    `;
-    
-    // Sembunyikan sidebar di halaman hasil
+    quiz.innerHTML = resultHTML;
     sidebarEl.style.display = 'none';
+    explanationEl.remove(); // Hapus elemen penjelasan dari DOM jika ada
 }
 
-/**
- * Membuat daftar soal untuk navigasi
- */
-function createQuestionList() {
-    questionListEl.innerHTML = ''; // Bersihkan daftar lama
-    quizData.forEach((_, index) => {
-        const button = document.createElement('button');
-        button.classList.add('q-nav-btn');
-        button.setAttribute('data-index', index);
-        button.innerText = `Soal ${index + 1}`;
-        
-        button.addEventListener('click', () => {
-            // Simpan jawaban soal saat ini sebelum berpindah
-            userAnswers[currentQuiz] = getSelected();
-            currentQuiz = index;
-            loadQuiz();
-        });
-        questionListEl.appendChild(button);
-    });
-}
-
-/**
- * Mengupdate warna tombol di daftar soal (sidebar)
- */
-function updateQuestionListStatus() {
-    const navButtons = document.querySelectorAll('.q-nav-btn');
-    navButtons.forEach((btn, index) => {
-        btn.classList.remove('active', 'answered');
-
-        if (userAnswers[index] !== null) {
-            btn.classList.add('answered'); // Soal sudah diisi
-        }
-
-        if (index === currentQuiz) {
-            btn.classList.add('active'); // Soal yang sedang dilihat
-        }
-    });
-}
-
-// ====================================================================
-// 4. SETUP MODE
-// ====================================================================
-
-function setMode(mode) {
-    currentMode = mode;
-    modeSelection.style.display = 'none';
-    mainContainer.style.display = 'flex'; // Tampilkan konten utama
-
-    createQuestionList(); // Buat daftar soal
-
-    if (mode === 'peserta') {
-        // Mode Peserta: Timer aktif, Navigasi disembunyikan
-        timerEl.style.display = 'block';
-        sidebarEl.style.display = 'none';
-        submitBtn.innerText = 'Lanjut';
-        loadQuiz();
-    } else if (mode === 'penjelasan') {
-        // Mode Penjelasan: Timer nonaktif, Navigasi penuh
-        timerEl.style.display = 'none';
-        sidebarEl.style.display = 'block';
-        
-        // Tampilkan tombol navigasi next/prev
-        nextBtn.style.display = 'inline-block';
-        prevBtn.style.display = 'inline-block';
-        submitBtn.innerText = 'Simpan Jawaban';
-        
-        loadQuiz();
-    }
-}
-
-// ====================================================================
-// 5. EVENT LISTENERS
-// ====================================================================
-
-// 5.1 Mode Selection
-document.getElementById('mode-peserta').addEventListener('click', () => setMode('peserta'));
-document.getElementById('mode-penjelasan').addEventListener('click', () => setMode('penjelasan'));
-
-// 5.2 Tombol Submit
-submitBtn.addEventListener('click', () => {
-    // Simpan jawaban saat ini
-    const answer = getSelected();
-    userAnswers[currentQuiz] = answer;
-    
-    if (currentMode === 'peserta') {
-        // Di mode peserta, tombol submit berfungsi untuk melanjutkan soal
-        processAnswer(false);
-    } else {
-        // Di mode penjelasan, tombol submit hanya untuk menyimpan & update status
-        updateQuestionListStatus();
-    }
-});
-
-// 5.3 Tombol Navigasi (Hanya untuk Mode Penjelasan)
-nextBtn.addEventListener('click', () => {
-    if (currentQuiz < quizData.length - 1) {
-        // Simpan jawaban soal saat ini sebelum berpindah
-        userAnswers[currentQuiz] = getSelected();
-        currentQuiz++;
-        loadQuiz();
-    }
-});
-
-prevBtn.addEventListener('click', () => {
-    if (currentQuiz > 0) {
-        // Simpan jawaban soal saat ini sebelum berpindah
-        userAnswers[currentQuiz] = getSelected();
-        currentQuiz--;
-        loadQuiz();
-    }
-});
+// ... (kode lain seperti setMode dan Event Listeners TIDAK BERUBAH) ...
